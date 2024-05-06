@@ -38,7 +38,6 @@ jobs:
       run: |
         sed -i "s|umaia.azurecr.io/nginx:latest|umaia.azurecr.io/nginx:${{ github.sha }}|" k8s/nginx-deployment.yaml
 
-
     - name: Set AKS context
       run: |
         az aks get-credentials --resource-group Kubernetes --name umaiaCluster --overwrite-existing
