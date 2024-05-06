@@ -46,9 +46,4 @@ jobs:
       run: |
         kubectl set image deployment/nginx-deployment nginx=umaia.azurecr.io/nginx:${{ github.sha }}-${{ steps.date.outputs.date }}
         kubectl apply -f k8s/
-    
-    - name: Deploy to AKS
-      run: |
-        az aks get-credentials --resource-group Kubernetes --name umaiaCluster --overwrite-existing
-        kubectl apply -f k8s/
 
