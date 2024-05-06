@@ -1,0 +1,35 @@
+name: CI/CD to AKS
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Kubernetes tools
+      uses: azure/setup-kubectl@v1
+      with:
+        version: 'v1.18.0'
+
+    - name: Set up Azure CLI
+      uses: azure/setup-azure-cli@v1
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy to AKS
+      run: |
+        az aks get-credentials --resource-group myResourceGroup --name myAKSCluster --overwrite-existing
+        kubectl apply -f k8s/
+
