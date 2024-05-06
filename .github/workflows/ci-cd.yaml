@@ -31,6 +31,6 @@ jobs:
 
     - name: Deploy to AKS
       run: |
-        az aks get-credentials --resource-group myResourceGroup --name myAKSCluster --overwrite-existing
+        az aks get-credentials --resource-group myResourceGroup --name umaiaCluster --overwrite-existing
         kubectl apply -f k8s/
 
