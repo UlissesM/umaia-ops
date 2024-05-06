@@ -32,11 +32,12 @@ jobs:
     - name: Build and push Docker image
       run: |
         az acr login --name umaia 
-        az acr build --registry umaia --image nginx:${{ github.sha }}-${{ steps.date.outputs.date }} .
+        az acr build --registry umaia --image nginx:${{ github.sha }} .
 
-    - name: Get current date
-      id: date
-      run: echo "::set-output name=date::$(date +'%Y%m%d')"
+    - name: Update deployment image
+      run: |
+        sed -i "s|umaia.azurecr.io/nginx:latest|umaia.azurecr.io/nginx:${{ github.sha }}|" k8s/nginx-deployment.yaml
+
 
     - name: Set AKS context
       run: |
@@ -44,6 +45,5 @@ jobs:
     
     - name: Deploy to AKS
       run: |
-        kubectl set image deployment/nginx-deployment nginx=umaia.azurecr.io/nginx:${{ github.sha }}-${{ steps.date.outputs.date }}
         kubectl apply -f k8s/
 
